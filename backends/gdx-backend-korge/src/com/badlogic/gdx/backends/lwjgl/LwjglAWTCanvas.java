@@ -51,8 +51,10 @@ import com.soywiz.kgl.KmlGl;
 import com.soywiz.korev.RenderEvent;
 import com.soywiz.korgw.awt.GLCanvas;
 import com.soywiz.korgw.awt.GLCanvasGameWindow;
+import com.soywiz.korgw.platform.BaseOpenglContext;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 /** An OpenGL surface on an AWT Canvas, allowing OpenGL to be embedded in a Swing application. This uses {@link AWTGLCanvas},
  * which allows multiple LwjglAWTCanvas to be used in a single application. All OpenGL calls are done on the EDT. Note that you
@@ -105,26 +107,31 @@ public class LwjglAWTCanvas implements Application {
 			canvas = new GLCanvas(true, true) {
 				private final Dimension minSize = new Dimension(0, 0);
 				private final NonSystemPaint nonSystemPaint = new NonSystemPaint(this);
-
-				private final GLCanvasGameWindow gw = new GLCanvasGameWindow(this);
 				private boolean initialized=false;
 
 				{
-					gw.onRenderEvent(new Function1<RenderEvent, Unit>() {
+					setDefaultRenderer(new Function2<KmlGl, java.awt.Graphics, Unit>() {
 						@Override
-						public Unit invoke(RenderEvent renderEvent) {
-							if(!initialized) {
-								initialized = true;
-								create(gw.getAg().getGl());
-							}
+						public Unit invoke(final KmlGl kmlGl, java.awt.Graphics graphics) {
+							getCtx().useContext(graphics, getAg(), new Function1<BaseOpenglContext.ContextInfo, Unit>() {
+								@Override
+								public Unit invoke(BaseOpenglContext.ContextInfo contextInfo) {
+									if(!initialized) {
+										initialized = true;
+										create(kmlGl);
+									}
 
-							try {
-								boolean systemPaint = !(EventQueue.getCurrentEvent() instanceof NonSystemPaint);
-								LwjglAWTCanvas.this.render(systemPaint);
-								Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(nonSystemPaint);
-							} catch (Throwable ex) {
-								exception(ex);
-							}
+									try {
+										boolean systemPaint = !(EventQueue.getCurrentEvent() instanceof NonSystemPaint);
+										LwjglAWTCanvas.this.render(systemPaint);
+										Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(nonSystemPaint);
+									} catch (Throwable ex) {
+										exception(ex);
+									}
+
+									return null;
+								}
+							});
 							return null;
 						}
 					});
@@ -287,7 +294,7 @@ public class LwjglAWTCanvas implements Application {
 			graphics.updateTime();
 			graphics.frameId++;
 			listener.render();
-			canvas.getCtx().swapBuffers();
+//			canvas.getCtx().swapBuffers();
 		}
 
 //		Display.sync(getFrameRate() * instanceCount);
