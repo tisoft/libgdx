@@ -263,7 +263,7 @@ public class LwjglGraphics implements Graphics {
 //
 //		Display.setLocation(config.x, config.y);
 		createDisplayPixelFormat(config.useGL30, config.gles30ContextMajorVersion, config.gles30ContextMinorVersion);
-		initiateGL(gl);
+//		initiateGL(gl);
 	}
 
 	/**

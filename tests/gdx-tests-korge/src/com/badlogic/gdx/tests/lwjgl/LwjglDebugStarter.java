@@ -16,12 +16,9 @@
 
 package com.badlogic.gdx.tests.lwjgl;
 
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTFrame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.tests.*;
-import com.badlogic.gdx.tests.extensions.ControllersTest;
-import com.badlogic.gdx.tests.extensions.FreeTypeMetricsTest;
-import com.badlogic.gdx.tests.superkoalio.SuperKoalio;
 import com.badlogic.gdx.tests.utils.GdxTest;
 
 public class LwjglDebugStarter {
@@ -34,15 +31,6 @@ public class LwjglDebugStarter {
 //		new SharedLibraryLoader("../../gdx/libs/gdx-natives.jar").load("gdx");
 
 		GdxTest test = new DragAndDropTest();
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.r = config.g = config.b = config.a = 8;
-//		config.width = 320;
-//		config.height = 241;
-		config.width = 960;
-		config.height = 600;
-//		config.width = 1920;
-//		config.height = 1080;
-//		config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-		new LwjglFrame(test, config);
+		new LwjglAWTFrame(test, test.getClass().getSimpleName(), 960, 600);
 	}
 }

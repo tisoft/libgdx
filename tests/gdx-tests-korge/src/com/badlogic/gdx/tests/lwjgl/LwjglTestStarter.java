@@ -35,9 +35,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTFrame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.backends.lwjgl.LwjglPreferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -81,7 +81,7 @@ public class LwjglTestStarter extends JFrame {
 			ShaderProgram.prependVertexCode = "";
 			ShaderProgram.prependFragmentCode = "";			
 		}
-		new LwjglFrame(test, config);
+		new LwjglAWTFrame(test, testName, 640 , 480);
 		return true;
 	}
 

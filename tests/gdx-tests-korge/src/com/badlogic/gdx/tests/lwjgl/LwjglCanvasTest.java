@@ -22,17 +22,17 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.tests.UITest;
 
 public class LwjglCanvasTest extends JFrame {
-	LwjglCanvas canvas;
+	LwjglAWTCanvas canvas;
 
 	public LwjglCanvasTest () {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		Container container = getContentPane();
-		canvas = new LwjglCanvas(new UITest());
+		canvas = new LwjglAWTCanvas(new UITest());
 
 		container.add(canvas.getCanvas(), BorderLayout.CENTER);
 
