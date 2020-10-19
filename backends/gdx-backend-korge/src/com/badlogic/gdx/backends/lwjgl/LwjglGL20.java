@@ -442,7 +442,7 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 		tmp.order(ByteOrder.nativeOrder());
 		IntBuffer intBuffer = tmp.asIntBuffer();
 
-		gl.getShaderInfoLog(shader, tmp.remaining(), fBuffer(tmp), fBuffer(buffer));
+		gl.getShaderInfoLog(shader, buffer.remaining(), fBuffer(tmp), fBuffer(buffer));
 		int numBytes = intBuffer.get(0);
 		byte[] bytes = new byte[numBytes];
 		buffer.get(bytes);
