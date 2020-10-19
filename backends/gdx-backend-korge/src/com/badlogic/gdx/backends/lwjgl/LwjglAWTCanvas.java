@@ -53,7 +53,6 @@ import com.soywiz.korgw.awt.GLCanvas;
 import com.soywiz.korgw.awt.GLCanvasGameWindow;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
-import org.jetbrains.annotations.NotNull;
 
 /** An OpenGL surface on an AWT Canvas, allowing OpenGL to be embedded in a Swing application. This uses {@link AWTGLCanvas},
  * which allows multiple LwjglAWTCanvas to be used in a single application. All OpenGL calls are done on the EDT. Note that you

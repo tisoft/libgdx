@@ -39,10 +39,7 @@ versions.androidFragment = "1.2.3"
 versions.javaparser = "2.3.0"
 
 libraries.korge = [
-        "org.lwjgl.lwjgl:lwjgl:${versions.lwjgl}",
-        "org.lwjgl.lwjgl:lwjgl_util:${versions.lwjgl}",
-        "com.badlogicgames.jlayer:jlayer:${versions.jlayer}",
-        "org.jcraft:jorbis:${versions.jorbis}"
+        "com.soywiz.korlibs.korgw:korgw-jvm:2.0.0-alpha"
 ]
 
 libraries.lwjgl = [
