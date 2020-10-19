@@ -34,5 +34,5 @@ task launchTestsLwjgl (dependsOn: classes, type: JavaExec) {
 }
 configure (launchTestsLwjgl) {
     group "LibGDX"
-    description = "Run the Lwjgl tests"
+    description = "Run the Korge tests"
 }

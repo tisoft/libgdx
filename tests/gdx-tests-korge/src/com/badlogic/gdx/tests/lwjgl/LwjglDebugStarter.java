@@ -16,8 +16,8 @@
 
 package com.badlogic.gdx.tests.lwjgl;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.tests.*;
 import com.badlogic.gdx.tests.extensions.ControllersTest;
 import com.badlogic.gdx.tests.extensions.FreeTypeMetricsTest;
@@ -43,6 +43,6 @@ public class LwjglDebugStarter {
 //		config.width = 1920;
 //		config.height = 1080;
 //		config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-		new LwjglApplication(test, config);
+		new LwjglFrame(test, config);
 	}
 }
