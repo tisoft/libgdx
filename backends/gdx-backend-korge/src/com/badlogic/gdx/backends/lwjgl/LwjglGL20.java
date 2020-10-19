@@ -190,8 +190,7 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	public void glDeleteBuffer (int buffer) {
 		ensureBufferCapacity(4);
 		intBuffer.clear();
-		intBuffer.put(buffer);
-		intBuffer.rewind();
+		intBuffer.put(0, buffer);
 		glDeleteBuffers(1, intBuffer);
 	}
 
@@ -203,8 +202,7 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	public void glDeleteFramebuffer (int framebuffer) {
 		ensureBufferCapacity(4);
 		intBuffer.clear();
-		intBuffer.put(framebuffer);
-		intBuffer.rewind();
+		intBuffer.put(0, framebuffer);
 		glDeleteFramebuffers(1, intBuffer);
 	}
 
@@ -219,8 +217,7 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	public void glDeleteRenderbuffer (int renderbuffer) {
 		ensureBufferCapacity(4);
 		intBuffer.clear();
-		intBuffer.put(renderbuffer);
-		intBuffer.rewind();
+		intBuffer.put(0, renderbuffer);
 		glDeleteRenderbuffers(1, intBuffer);
 	}
 
@@ -236,8 +233,7 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	public void glDeleteTexture (int texture) {
 		ensureBufferCapacity(4);
 		intBuffer.clear();
-		intBuffer.put(texture);
-		intBuffer.rewind();
+		intBuffer.put(0, texture);
 		glDeleteTextures(1, intBuffer);
 	}
 
