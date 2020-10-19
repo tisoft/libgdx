@@ -22,21 +22,16 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 
-import com.soywiz.kgl.CheckErrorsKmlGlProxy;
 import com.soywiz.kgl.KmlGl;
 
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.soywiz.kgl.KmlGlProxy;
-import com.soywiz.kmem.BufferJvmKt;
 import com.soywiz.kmem.FBuffer;
-import com.soywiz.kmem.Int32Buffer;
 import com.soywiz.kmem.MemBuffer;
-import com.soywiz.korgw.osx.MacKmlGL;
 import com.soywiz.korgw.platform.NativeKgl;
 
-/** An implementation of the {@link gl} interface based on LWJGL. Note that LWJGL shaders and OpenGL ES shaders will not be 100%
+/** An implementation of the {@link com.badlogic.gdx.graphics.GL20} interface based on LWJGL. Note that LWJGL shaders and OpenGL ES shaders will not be 100%
  * compatible. Some glGetXXX methods are not implemented.
  * 
  * @author mzechner */
@@ -59,14 +54,14 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 		}
 	}
 
-	private FloatBuffer toFloatBuffer (float v[], int offset, int count) {
+	private FloatBuffer toFloatBuffer (float[] v, int offset, int count) {
 		ensureBufferCapacity(count << 2);
 		floatBuffer.clear();
 		com.badlogic.gdx.utils.BufferUtils.copy(v, floatBuffer, count, offset);
 		return floatBuffer;
 	}
 
-	private IntBuffer toIntBuffer (int v[], int offset, int count) {
+	private IntBuffer toIntBuffer (int[] v, int offset, int count) {
 		ensureBufferCapacity(count << 2);
 		intBuffer.clear();
 		com.badlogic.gdx.utils.BufferUtils.copy(v, count, offset, intBuffer);
@@ -801,28 +796,23 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 		try {
 			Field addressField = Buffer.class.getDeclaredField("address");
 			addressField.setAccessible(true);
-			long address= (Long) addressField.get(buffer);
-			return address;
-		} catch (NoSuchFieldException e) {
-			throw new GdxRuntimeException(e);
-		} catch (IllegalAccessException e) {
+			return (Long) addressField.get(buffer);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new GdxRuntimeException(e);
 		}
 	}
 	private FBuffer fBuffer(Buffer buffer){
-		ByteBuffer b= null;
+		ByteBuffer b;
 		if(buffer==null){
 			return null;
-		}else 		if(buffer instanceof ByteBuffer){
+		}else if(buffer instanceof ByteBuffer){
 			b=(ByteBuffer)buffer;
 		} else {
 			try {
 				Field f = buffer.getClass().getDeclaredField("att");
 				f.setAccessible(true);
 				b = (ByteBuffer) f.get(buffer);
-			} catch (NoSuchFieldException e) {
-				throw new GdxRuntimeException(e);
-			} catch (IllegalAccessException e) {
+			} catch (NoSuchFieldException | IllegalAccessException e) {
 				throw new GdxRuntimeException(e);
 			}
 		}
