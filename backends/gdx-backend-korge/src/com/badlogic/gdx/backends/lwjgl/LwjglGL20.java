@@ -20,8 +20,10 @@ import java.lang.reflect.Field;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import com.soywiz.kgl.KmlGl;
 
@@ -30,6 +32,7 @@ import com.soywiz.kgl.KmlGlProxy;
 import com.soywiz.kmem.FBuffer;
 import com.soywiz.kmem.MemBuffer;
 import com.soywiz.korgw.platform.NativeKgl;
+import kotlin.random.Random;
 
 /** An implementation of the {@link com.badlogic.gdx.graphics.GL20} interface based on LWJGL. Note that LWJGL shaders and OpenGL ES shaders will not be 100%
  * compatible. Some glGetXXX methods are not implemented.
@@ -772,8 +775,7 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	}
 
 	public void glVertexAttribPointer (int indx, int size, int type, boolean normalized, int stride, Buffer buffer) {
-		long address = getAddress(buffer);
-		gl.vertexAttribPointer(indx, size, type, normalized,stride, address);
+		gl.vertexAttribPointer(indx, size, type, normalized, stride, getAddress(buffer));
 	}
 
 	public void glViewport (int x, int y, int width, int height) {
@@ -789,29 +791,49 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	}
 
 	private long getAddress(Buffer buffer) {
+		// use a sliced buffer to get the correct address, including relative positioning
+		Buffer sliced;
+		//TODO: on java 9.x we could do sliced=buffer.slice()
+		if (buffer instanceof ByteBuffer) {
+			sliced = ((ByteBuffer) buffer).slice();
+		} else if (buffer instanceof ShortBuffer) {
+			sliced = ((ShortBuffer) buffer).slice();
+		} else if (buffer instanceof IntBuffer) {
+			sliced = ((IntBuffer) buffer).slice();
+		} else if (buffer instanceof FloatBuffer) {
+			sliced = ((FloatBuffer) buffer).slice();
+		} else if (buffer instanceof DoubleBuffer) {
+			sliced = ((DoubleBuffer) buffer).slice();
+		} else {
+			throw new GdxRuntimeException("Unsupported Buffer Type " + buffer.getClass());
+		}
 		try {
 			Field addressField = Buffer.class.getDeclaredField("address");
 			addressField.setAccessible(true);
-			return (Long) addressField.get(buffer);
+			return (Long) addressField.get(sliced);//+b.position();
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new GdxRuntimeException(e);
 		}
 	}
-	private FBuffer fBuffer(Buffer buffer){
-		ByteBuffer b;
-		if(buffer==null){
+
+	private FBuffer fBuffer(Buffer buffer) {
+		ByteBuffer b = getByteBuffer(buffer);
+		return FBuffer.Companion.wrap(new MemBuffer(b, b.remaining()), b.remaining());
+	}
+
+	private ByteBuffer getByteBuffer(Buffer buffer) {
+		if (buffer == null) {
 			return null;
-		}else if(buffer instanceof ByteBuffer){
-			b=(ByteBuffer)buffer;
+		} else if (buffer instanceof ByteBuffer) {
+			return (ByteBuffer) buffer;
 		} else {
 			try {
 				Field f = buffer.getClass().getDeclaredField("att");
 				f.setAccessible(true);
-				b = (ByteBuffer) f.get(buffer);
+				return getByteBuffer ((Buffer) f.get(buffer));
 			} catch (NoSuchFieldException | IllegalAccessException e) {
 				throw new GdxRuntimeException(e);
 			}
 		}
-		return FBuffer.Companion.wrap(new MemBuffer(b, b.remaining()), b.remaining());
 	}
 }
