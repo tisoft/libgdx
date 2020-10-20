@@ -104,7 +104,7 @@ public class LwjglAWTCanvas implements Application {
 
 		GLCanvas sharedDrawable = sharedContextCanvas != null ? sharedContextCanvas.canvas : null;
 		try {
-			canvas = new GLCanvas(true, true) {
+			canvas = new GLCanvas(true, false) {
 				private final Dimension minSize = new Dimension(0, 0);
 				private final NonSystemPaint nonSystemPaint = new NonSystemPaint(this);
 				private boolean initialized=false;
