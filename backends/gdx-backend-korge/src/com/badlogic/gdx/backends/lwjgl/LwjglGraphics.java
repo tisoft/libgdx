@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.soywiz.kgl.KmlGl;
+import com.soywiz.korgw.awt.GLCanvas;
 
 /** An implementation of the {@link Graphics} interface based on Lwjgl.
  * @author mzechner */
@@ -95,12 +96,12 @@ public class LwjglGraphics implements Graphics {
 
 	@Override
 	public int getBackBufferWidth () {
-		return getWidth();
+		return Math.max(1, ((GLCanvas) canvas).getAg().getBackWidth());
 	}
 
 	@Override
 	public int getBackBufferHeight () {
-		return getHeight();
+		return Math.max(1, ((GLCanvas) canvas).getAg().getBackHeight());
 	}
 
 	@Override
