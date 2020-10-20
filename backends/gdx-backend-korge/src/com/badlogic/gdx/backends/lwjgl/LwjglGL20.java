@@ -817,6 +817,9 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 	}
 
 	private FBuffer fBuffer(Buffer buffer) {
+		if(buffer==null){
+			return null;
+		}
 		ByteBuffer b = getByteBuffer(buffer);
 		return FBuffer.Companion.wrap(new MemBuffer(b, b.remaining()), b.remaining());
 	}
