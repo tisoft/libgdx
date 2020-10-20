@@ -97,6 +97,7 @@ public class LwjglAWTCanvas implements Application {
 		this.listener = listener;
 		if (config == null) config = new LwjglApplicationConfiguration();
 
+		GdxNativesLoader.load();
 		setApplicationLogger(new LwjglApplicationLogger());
 		instanceCount++;
 
@@ -231,7 +232,6 @@ public class LwjglAWTCanvas implements Application {
 	}
 
 	void setGlobals () {
-		GdxNativesLoader.load();
 		Gdx.app = this;
 		if (audio != null) Gdx.audio = audio;
 		if (files != null) Gdx.files = files;
@@ -287,7 +287,7 @@ public class LwjglAWTCanvas implements Application {
 			graphics.updateTime();
 			graphics.frameId++;
 			listener.render();
-			canvas.getCtx().swapBuffers();
+//			canvas.getCtx().swapBuffers();
 		}
 
 //		Display.sync(getFrameRate() * instanceCount);
