@@ -18,23 +18,18 @@ package com.badlogic.gdx.backends.lwjgl;
 
 import java.awt.Canvas;
 import java.awt.Toolkit;
-import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.glutils.GLVersion;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Blending;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.soywiz.kgl.KmlGl;
 import com.soywiz.korgw.awt.GLCanvas;
 
@@ -641,26 +636,33 @@ public class LwjglGraphics implements Graphics {
 
 	@Override
 	public void setCursor (com.badlogic.gdx.graphics.Cursor cursor) {
-		if (canvas != null && SharedLibraryLoader.isMac) {
-			return;
+		if(canvas.getCursor()!=((LwjglCursor)cursor).awtCursor) {
+			canvas.setCursor(((LwjglCursor) cursor).awtCursor);
 		}
-//		try {
-//			Mouse.setNativeCursor(((LwjglCursor)cursor).lwjglCursor);
-//		} catch (LWJGLException e) {
-//			throw new GdxRuntimeException("Could not set cursor image.", e);
-//		}
 	}
 
 	@Override
 	public void setSystemCursor (SystemCursor systemCursor) {
-		if (canvas != null && SharedLibraryLoader.isMac) {
-			return;
+		switch (systemCursor){
+			case Arrow:
+				canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+				break;
+			case Ibeam:
+				canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.TEXT_CURSOR));
+				break;
+			case Crosshair:
+				canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+				break;
+			case Hand:
+				canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+				break;
+			case HorizontalResize:
+				canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.W_RESIZE_CURSOR));
+				break;
+			case VerticalResize:
+				canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.N_RESIZE_CURSOR));
+				break;
 		}
-//		try {
-//			Mouse.setNativeCursor(null);
-//		} catch (LWJGLException e) {
-//			throw new GdxRuntimeException("Couldn't set system cursor");
-//		}
 	}
 
 //	private class LwjglDisplayMode extends DisplayMode {

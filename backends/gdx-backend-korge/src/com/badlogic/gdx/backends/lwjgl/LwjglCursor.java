@@ -1,25 +1,23 @@
 
 package com.badlogic.gdx.backends.lwjgl;
 
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 public class LwjglCursor implements Cursor {
-//	org.lwjgl.input.Cursor lwjglCursor = null;
+	java.awt.Cursor awtCursor;
 
 	public LwjglCursor (Pixmap pixmap, int xHotspot, int yHotspot) {
-		if (((LwjglGraphics)Gdx.graphics).canvas != null && SharedLibraryLoader.isMac) {
-			return;
-		}
-//		try {
 			if (pixmap == null) {
-//				lwjglCursor = null;
+				awtCursor = null;
 				return;
 			}
 
@@ -51,31 +49,27 @@ public class LwjglCursor implements Cursor {
 			IntBuffer pixelBuffer = pixmap.getPixels().asIntBuffer();
 			int[] pixelsRGBA = new int[pixelBuffer.capacity()];
 			pixelBuffer.get(pixelsRGBA);
-			int[] pixelsARGBflipped = new int[pixelBuffer.capacity()];
+			int[] pixelsARGB = new int[pixelBuffer.capacity()];
 			int pixel;
 			if (pixelBuffer.order() == ByteOrder.BIG_ENDIAN) {
-				for (int y = 0; y < pixmap.getHeight(); ++y) {
-					for (int x = 0; x < pixmap.getWidth(); ++x) {
-						pixel = pixelsRGBA[x + (y * pixmap.getWidth())];
-						pixelsARGBflipped[x + ((pixmap.getHeight() - 1 - y) * pixmap.getWidth())] = ((pixel >> 8) & 0x00FFFFFF)
+				for(int i=0;i<pixelsRGBA.length;i++) {
+						pixel = pixelsRGBA[i];
+						pixelsARGB[i] = ((pixel >> 8) & 0x00FFFFFF)
 							| ((pixel << 24) & 0xFF000000);
-					}
 				}
 			} else {
-				for (int y = 0; y < pixmap.getHeight(); ++y) {
-					for (int x = 0; x < pixmap.getWidth(); ++x) {
-						pixel = pixelsRGBA[x + (y * pixmap.getWidth())];
-						pixelsARGBflipped[x + ((pixmap.getHeight() - 1 - y) * pixmap.getWidth())] = ((pixel & 0xFF) << 16)
+				for(int i=0;i<pixelsRGBA.length;i++) {
+						pixel = pixelsRGBA[i];
+						pixelsARGB[i] = ((pixel & 0xFF) << 16)
 							| ((pixel & 0xFF0000) >> 16) | (pixel & 0xFF00FF00);
-					}
 				}
 			}
 
-//			lwjglCursor = new org.lwjgl.input.Cursor(pixmap.getWidth(), pixmap.getHeight(), xHotspot, pixmap.getHeight() - yHotspot
-//				- 1, 1, IntBuffer.wrap(pixelsARGBflipped), null);
-//		} catch (LWJGLException e) {
-//			throw new GdxRuntimeException("Could not create cursor image.", e);
-//		}
+		BufferedImage bi = new BufferedImage( pixmap.getWidth(), pixmap.getHeight(), BufferedImage.TYPE_INT_ARGB );
+		final int[] a = ( (DataBufferInt) bi.getRaster().getDataBuffer() ).getData();
+		System.arraycopy(pixelsARGB, 0, a, 0, pixelsARGB.length);
+
+		awtCursor = Toolkit.getDefaultToolkit().createCustomCursor(bi, new Point(xHotspot, yHotspot), null);
 	}
 
 	@Override
