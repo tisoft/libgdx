@@ -16,6 +16,7 @@
 
 dependencies {
     compile project(":gdx")
+    compile project(":backends:gdx-backend-korge")
     compile project(":backends:gdx-backend-lwjgl")
     compile project(":extensions:gdx-freetype")
     compile project(":backends:gdx-backend-headless")

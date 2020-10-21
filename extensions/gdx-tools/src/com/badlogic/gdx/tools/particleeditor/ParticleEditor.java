@@ -37,7 +37,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.badlogic.gdx.backends.korge.LwjglAWTCanvas;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -62,7 +62,7 @@ public class ParticleEditor extends JFrame {
 	public static final String DEFAULT_PREMULT_PARTICLE = "pre_particle.png";
 
 	public Renderer renderer;
-	LwjglCanvas lwjglCanvas;
+	LwjglAWTCanvas lwjglCanvas;
 	JPanel rowsPanel;
 	JPanel editRowsPanel;
 	EffectPanel effectPanel;
@@ -87,7 +87,7 @@ public class ParticleEditor extends JFrame {
 		super("Particle Editor");
 
 		renderer = new Renderer();
-		lwjglCanvas = new LwjglCanvas(renderer);
+		lwjglCanvas = new LwjglAWTCanvas(renderer);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosed (WindowEvent event) {
 				System.exit(0);
@@ -427,6 +427,11 @@ public class ParticleEditor extends JFrame {
 			float[] colors = backgroundColor.getColors();
 			Gdx.gl.glClearColor(colors[0], colors[1], colors[2], 1.0f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			//TODO: korge currently calls the render method too early
+			if(previewImagePanel==null){
+				return;
+			}
 
 			previewImagePanel.updateSpritePosition();
 
