@@ -1,5 +1,5 @@
 
-package com.badlogic.gdx.backends.lwjgl;
+package com.badlogic.gdx.backends.korge;
 
 import java.awt.Point;
 import java.awt.Toolkit;

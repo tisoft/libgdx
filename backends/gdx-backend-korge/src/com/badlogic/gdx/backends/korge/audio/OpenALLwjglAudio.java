@@ -1,4 +1,4 @@
-package com.badlogic.gdx.backends.lwjgl.audio;
+package com.badlogic.gdx.backends.korge.audio;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.audio.AudioDevice;

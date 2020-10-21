@@ -16,8 +16,8 @@
 
 package com.badlogic.gdx.tests.lwjgl;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTFrame;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.korge.LwjglAWTFrame;
+import com.badlogic.gdx.backends.korge.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tests.*;
 import com.badlogic.gdx.tests.utils.GdxTest;
 

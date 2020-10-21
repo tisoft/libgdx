@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.badlogic.gdx.backends.lwjgl;
+package com.badlogic.gdx.backends.korge;
 
 import java.lang.reflect.Field;
 import java.nio.Buffer;

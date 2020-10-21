@@ -35,10 +35,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTFrame;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglPreferences;
+import com.badlogic.gdx.backends.korge.LwjglAWTFrame;
+import com.badlogic.gdx.backends.korge.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.korge.LwjglFiles;
+import com.badlogic.gdx.backends.korge.LwjglPreferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.tests.utils.GdxTest;
