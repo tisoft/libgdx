@@ -811,7 +811,9 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 			Field addressField = Buffer.class.getDeclaredField("address");
 			addressField.setAccessible(true);
 			return (Long) addressField.get(sliced);//+b.position();
-		} catch (NoSuchFieldException | IllegalAccessException e) {
+		} catch (NoSuchFieldException e) {
+			throw new GdxRuntimeException(e);
+		} catch (IllegalAccessException e) {
 			throw new GdxRuntimeException(e);
 		}
 	}
@@ -834,7 +836,9 @@ class LwjglGL20 implements com.badlogic.gdx.graphics.GL20 {
 				Field f = buffer.getClass().getDeclaredField("att");
 				f.setAccessible(true);
 				return getByteBuffer ((Buffer) f.get(buffer));
-			} catch (NoSuchFieldException | IllegalAccessException e) {
+			} catch (NoSuchFieldException e) {
+				throw new GdxRuntimeException(e);
+			} catch (IllegalAccessException e) {
 				throw new GdxRuntimeException(e);
 			}
 		}
