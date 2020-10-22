@@ -25,6 +25,7 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.PaintEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,15 +45,26 @@ import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.korge.audio.OpenALLwjglAudio;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Clipboard;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.soywiz.kgl.KmlGl;
+import com.soywiz.korag.AG;
 import com.soywiz.korev.RenderEvent;
 import com.soywiz.korgw.awt.GLCanvas;
 import com.soywiz.korgw.awt.GLCanvasGameWindow;
+import com.soywiz.korgw.platform.BaseOpenglContext;
+import com.soywiz.korio.lang.Disposable;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /** An OpenGL surface on an AWT Canvas, allowing OpenGL to be embedded in a Swing application. This uses {@link AWTGLCanvas},
  * which allows multiple LwjglAWTCanvas to be used in a single application. All OpenGL calls are done on the EDT. Note that you
@@ -91,6 +103,7 @@ public class LwjglAWTCanvas implements Application {
 	public LwjglAWTCanvas (ApplicationListener listener, LwjglApplicationConfiguration config) {
 		this(listener, config, null);
 	}
+	private BaseOpenglContext.ContextInfo contextInfo;
 
 	public LwjglAWTCanvas (ApplicationListener listener, LwjglApplicationConfiguration config,
 		LwjglAWTCanvas sharedContextCanvas) {
@@ -117,6 +130,54 @@ public class LwjglAWTCanvas implements Application {
 							if(!initialized) {
 								initialized = true;
 								create(gw.getAg().getGl());
+								final BaseOpenglContext ctx=getCtx();
+								setCtx(new BaseOpenglContext() {
+									@Override
+									public double getScaleFactor() {
+										return ctx.getScaleFactor();
+									}
+
+									@Override
+									public void useContext(@Nullable Object o, @NotNull AG ag, @NotNull final Function1<? super ContextInfo, Unit> function1) {
+ctx.useContext(o, ag, new Function1<ContextInfo, Unit>() {
+	@Override
+	public Unit invoke(ContextInfo contextInfo) {
+		LwjglAWTCanvas.this.contextInfo = contextInfo;
+		return function1.invoke(contextInfo);
+	}
+});
+									}
+
+									@Override
+									public void makeCurrent() {
+ctx.makeCurrent();
+									}
+
+									@Override
+									public void releaseCurrent() {
+ctx.releaseCurrent();
+									}
+
+									@Override
+									public void swapBuffers() {
+ctx.swapBuffers();
+									}
+
+									@Override
+									public boolean supportsSwapInterval() {
+										return ctx.supportsSwapInterval();
+									}
+
+									@Override
+									public void swapInterval(int i) {
+ctx.swapInterval(i);
+									}
+
+									@Override
+									public void dispose() {
+ctx.dispose();
+									}
+								});
 							}
 
 							try {
@@ -268,11 +329,33 @@ public class LwjglAWTCanvas implements Application {
 		if (lastWidth != width || lastHeight != height) {
 			lastWidth = width;
 			lastHeight = height;
-			Gdx.gl.glViewport(0, 0, lastWidth, lastHeight);
+		//	Gdx.gl.glViewport(0, 0, lastWidth, lastHeight);
 			resize(width, height);
 			listener.resize(width, height);
 			shouldRender = true;
 		}
+		//ScissorStack.pushScissors(new com.badlogic.gdx.math.Rectangle())
+		if(contextInfo!=null){
+			try {
+				Field scissorsField = ClassReflection.getDeclaredField(contextInfo.getClass(), "scissors");
+				scissorsField.setAccessible(true);
+				com.soywiz.korma.geom.Rectangle scissors=(com.soywiz.korma.geom.Rectangle) scissorsField.get(contextInfo);
+				Field viewportField = ClassReflection.getDeclaredField(contextInfo.getClass(), "viewport");
+				viewportField.setAccessible(true);
+				com.soywiz.korma.geom.Rectangle viewport=(com.soywiz.korma.geom.Rectangle) viewportField.get(contextInfo);
+
+				Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+				Gdx.gl.glScissor((int)scissors.getX(),(int)scissors.getY(),(int)scissors.getWidth(),(int)scissors.getHeight());
+				Gdx.gl.glViewport((int)viewport.getX(),(int)viewport.getY(),(int)viewport.getWidth(),(int)viewport.getHeight());
+
+			} catch (ReflectionException e) {
+				throw new GdxRuntimeException(e);
+			}
+		}
+		Window w=SwingUtilities.getWindowAncestor(canvas);
+		Rectangle bounds=SwingUtilities.convertRectangle(canvas, canvas.getBounds(), w);
+		//Gdx.gl.glScissor((int) (bounds.getX() * canvas.getCtx().getScaleFactor()), (int) (bounds.getY() * canvas.getCtx().getScaleFactor()), (int) (bounds.getWidth() * canvas.getCtx().getScaleFactor()), (int) (bounds.getHeight() * canvas.getCtx().getScaleFactor()));
+		//Gdx.gl.glViewport((int) (bounds.getX() * canvas.getCtx().getScaleFactor()), (int) (bounds.getY() * canvas.getCtx().getScaleFactor()), (int) (bounds.getWidth() * canvas.getCtx().getScaleFactor()), (int) (bounds.getHeight() * canvas.getCtx().getScaleFactor()));
 
 		if (executeRunnables()) shouldRender = true;
 
