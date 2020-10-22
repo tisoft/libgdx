@@ -37,7 +37,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTCanvas;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -62,7 +62,7 @@ public class ParticleEditor extends JFrame {
 	public static final String DEFAULT_PREMULT_PARTICLE = "pre_particle.png";
 
 	public Renderer renderer;
-	LwjglCanvas lwjglCanvas;
+	Lwjgl3AWTCanvas lwjglCanvas;
 	JPanel rowsPanel;
 	JPanel editRowsPanel;
 	EffectPanel effectPanel;
@@ -87,7 +87,7 @@ public class ParticleEditor extends JFrame {
 		super("Particle Editor");
 
 		renderer = new Renderer();
-		lwjglCanvas = new LwjglCanvas(renderer);
+		lwjglCanvas = new Lwjgl3AWTCanvas(renderer);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosed (WindowEvent event) {
 				System.exit(0);

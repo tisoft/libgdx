@@ -41,8 +41,8 @@ import org.xml.sax.SAXException;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
@@ -480,12 +480,11 @@ public class TiledMapPacker {
 		}
 
 		TiledMapPacker packer = new TiledMapPacker(packerSettings);
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.forceExit = false;
-		config.width = 100;
-		config.height = 50;
-		config.title = "TiledMapPacker";
-		new LwjglApplication(new ApplicationListener() {
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		//config.forceExit = false;
+		config.setWindowedMode(100, 50);
+		config.setTitle("TiledMapPacker");
+		new Lwjgl3Application(new ApplicationListener() {
 
 			@Override
 			public void resume () {
