@@ -28,8 +28,10 @@ import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.lwjgl3.audio.OpenALLwjgl3Audio;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Clipboard;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 
 import javax.swing.SwingUtilities;
@@ -113,12 +115,33 @@ public class Lwjgl3AWTCanvas implements Application {
 				}
 
 				@Override
+				protected void beforeRender() {
+					super.beforeRender();
+					GL.createCapabilities();
+				}
+
+				@Override
+				public void update(java.awt.Graphics g) {
+					render();
+				}
+
+				@Override
+				public void paint(java.awt.Graphics g) {
+					render();
+				}
+
+				@Override
 				public void initGL () {
 					create();
 				}
 
 				@Override
 				public void paintGL () {
+//					Gdx.gl.glClearColor(1.0f,0,0,0.5f);
+//					Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+					Gdx.gl.glViewport(0,0,getWidth(), getHeight());
+					Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+					Gdx.gl.glScissor(0,0,getWidth(),getHeight());
 					try {
 						boolean systemPaint = !(EventQueue.getCurrentEvent() instanceof NonSystemPaint);
 						Lwjgl3AWTCanvas.this.render(systemPaint);
@@ -126,6 +149,7 @@ public class Lwjgl3AWTCanvas implements Application {
 					} catch (Throwable ex) {
 						exception(ex);
 					}
+					swapBuffers();
 				}
 			};
 		} catch (Throwable ex) {
@@ -184,7 +208,7 @@ public class Lwjgl3AWTCanvas implements Application {
 		return listener;
 	}
 
-	public Canvas getCanvas () {
+	public AWTGLCanvas getCanvas () {
 		return canvas;
 	}
 
@@ -224,6 +248,11 @@ public class Lwjgl3AWTCanvas implements Application {
 	}
 
 	void setGlobals () {
+		Gdx.graphics = graphics;
+		Gdx.gl30 = graphics.getGL30();
+		Gdx.gl20 = Gdx.gl30 != null ? Gdx.gl30 : graphics.getGL20();
+		Gdx.gl = Gdx.gl30 != null ? Gdx.gl30 : Gdx.gl20;
+
 		Gdx.app = this;
 		if (audio != null) Gdx.audio = audio;
 		if (files != null) Gdx.files = files;

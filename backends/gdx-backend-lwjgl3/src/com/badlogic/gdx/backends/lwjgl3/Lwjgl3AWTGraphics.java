@@ -32,6 +32,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.nio.IntBuffer;
 
 public class Lwjgl3AWTGraphics implements Graphics, Disposable {
@@ -59,23 +61,6 @@ public class Lwjgl3AWTGraphics implements Graphics, Disposable {
 
 	IntBuffer tmpBuffer = BufferUtils.createIntBuffer(1);
 	IntBuffer tmpBuffer2 = BufferUtils.createIntBuffer(1);
-	IntBuffer tmpBuffer3 = BufferUtils.createIntBuffer(1);
-	IntBuffer tmpBuffer4 = BufferUtils.createIntBuffer(1);
-
-//	private GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
-//		@Override
-//		public void invoke(long windowHandle, final int width, final int height) {
-//			updateFramebufferInfo();
-//			if (!window.isListenerInitialized()) {
-//				return;
-//			}
-//			window.makeCurrent();
-//			gl20.glViewport(0, 0, width, height);
-//			window.getListener().resize(getWidth(), getHeight());
-//			window.getListener().render();
-//			GLFW.glfwSwapBuffers(windowHandle);
-//		}
-//	};
 
 	public Lwjgl3AWTGraphics(Lwjgl3AWTCanvas window) {
 		this.window = window;
@@ -87,7 +72,46 @@ public class Lwjgl3AWTGraphics implements Graphics, Disposable {
 			this.gl30 = null;
 		}
 		updateFramebufferInfo();
-//		GLFW.glfwSetFramebufferSizeCallback(window.getWindowHandle(), resizeCallback);
+
+		window.getCanvas().addComponentListener(new ComponentListener() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				updateFramebufferInfo();
+				window.getCanvas().runInContext(new Runnable() {
+					@Override
+					public void run() {
+			gl20.glViewport(0, 0, getWidth(), getHeight());
+//			window.getListener().resize(getWidth(), getHeight());
+//			window.getListener().render();
+
+					}
+				});
+
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+updateFramebufferInfo();
+				window.getCanvas().runInContext(new Runnable() {
+					@Override
+					public void run() {
+						gl20.glViewport(0, 0, getWidth(), getHeight());
+//			window.getListener().resize(getWidth(), getHeight());
+//			window.getListener().render();
+
+					}
+				});		}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+
+			}
+		});
 	}
 
 	void initiateGL() {
@@ -102,12 +126,10 @@ public class Lwjgl3AWTGraphics implements Graphics, Disposable {
 	}
 
 	void updateFramebufferInfo() {
-//		GLFW.glfwGetFramebufferSize(window.getWindowHandle(), tmpBuffer, tmpBuffer2);
-//		this.backBufferWidth = tmpBuffer.get(0);
-//		this.backBufferHeight = tmpBuffer2.get(0);
-//		GLFW.glfwGetWindowSize(window.getWindowHandle(), tmpBuffer, tmpBuffer2);
-		Lwjgl3AWTGraphics.this.logicalWidth = getWindow().getCanvas().getWidth();//tmpBuffer.get(0);
-		Lwjgl3AWTGraphics.this.logicalHeight = getWindow().getCanvas().getHeight();// tmpBuffer2.get(0);
+		this.backBufferWidth = getWindow().getCanvas().getWidth();
+		this.backBufferHeight = getWindow().getCanvas().getHeight();
+		Lwjgl3AWTGraphics.this.logicalWidth = getWindow().getCanvas().getWidth();
+		Lwjgl3AWTGraphics.this.logicalHeight = getWindow().getCanvas().getHeight();
 		Lwjgl3ApplicationConfiguration config = window.getConfig();
 		bufferFormat = new BufferFormat(config.r, config.g, config.b, config.a, config.depth, config.stencil,
 				config.samples, false);
