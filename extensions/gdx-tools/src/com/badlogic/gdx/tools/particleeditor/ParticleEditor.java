@@ -428,6 +428,11 @@ public class ParticleEditor extends JFrame {
 			Gdx.gl.glClearColor(colors[0], colors[1], colors[2], 1.0f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+			//TODO: lwjgl3 currently calls the render method too early
+			if(previewImagePanel==null){
+				return;
+			}
+
 			previewImagePanel.updateSpritePosition();
 
 			if ((pixelsPerMeter.getValue() != pixelsPerMeterPrev) || (zoomLevel.getValue() != zoomLevelPrev)) {
