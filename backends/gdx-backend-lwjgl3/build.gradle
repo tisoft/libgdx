@@ -17,8 +17,16 @@
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
     compile libraries.lwjgl3
+    compile ('com.github.LWJGLX:lwjgl3-awt:05784f9517') {
+        exclude group: '*', module: '*'
+    }
+    compile "org.lwjgl:lwjgl-jawt:${versions.lwjgl3}"
 }
 
 

@@ -17,6 +17,7 @@
 package com.badlogic.gdx.backends.lwjgl3;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 public final class Lwjgl3NativesLoader {
 

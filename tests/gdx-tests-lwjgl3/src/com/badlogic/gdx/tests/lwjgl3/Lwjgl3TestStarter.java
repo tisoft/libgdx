@@ -20,6 +20,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTCanvas;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
@@ -42,6 +43,8 @@ import com.badlogic.gdx.tests.utils.GdxTestConfig;
 import com.badlogic.gdx.tests.utils.GdxTests;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import javax.swing.JFrame;
+
 public class Lwjgl3TestStarter {
 	
 	static CommandLineOptions options;
@@ -54,7 +57,7 @@ public class Lwjgl3TestStarter {
 	 * @param argv command line arguments
 	 */
 	public static void main (String[] argv) {
-		System.setProperty("java.awt.headless", "true");
+		//System.setProperty("java.awt.headless", "true");
 
 		options = new CommandLineOptions(argv);
 		
@@ -64,7 +67,13 @@ public class Lwjgl3TestStarter {
 			config.useOpenGL3(true, 3, 2);
 		}
 
-		new Lwjgl3Application(new TestChooser(), config);
+		//new Lwjgl3Application(new TestChooser(), config);
+		JFrame frame=new JFrame();
+		Lwjgl3AWTCanvas lwjgl3AWTCanvas = new Lwjgl3AWTCanvas(new TestChooser(), config);
+		lwjgl3AWTCanvas.getCanvas().setSize(640,480);
+		frame.getContentPane().add(lwjgl3AWTCanvas.getCanvas());
+		frame.setVisible(true);
+		frame.pack();
 	}
 
 	static class TestChooser extends ApplicationAdapter {
