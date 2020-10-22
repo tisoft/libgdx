@@ -42,8 +42,17 @@ import com.badlogic.gdx.tests.utils.GdxTest;
 import com.badlogic.gdx.tests.utils.GdxTestConfig;
 import com.badlogic.gdx.tests.utils.GdxTests;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLCapabilities;
+import org.lwjgl.opengl.awt.AWTGLCanvas;
+import org.lwjgl.opengl.awt.GLData;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 public class Lwjgl3TestStarter {
 	
@@ -70,10 +79,46 @@ public class Lwjgl3TestStarter {
 		//new Lwjgl3Application(new TestChooser(), config);
 		JFrame frame=new JFrame();
 		Lwjgl3AWTCanvas lwjgl3AWTCanvas = new Lwjgl3AWTCanvas(new TestChooser(), config);
-		lwjgl3AWTCanvas.getCanvas().setSize(640,480);
-		frame.getContentPane().add(lwjgl3AWTCanvas.getCanvas());
+		lwjgl3AWTCanvas.getCanvas().setPreferredSize(new Dimension(640,480));
+		frame.getContentPane().add(new JLabel("North"), BorderLayout.NORTH);
+		frame.getContentPane().add(lwjgl3AWTCanvas.getCanvas(), BorderLayout.CENTER);
+		frame.getContentPane().add(new JLabel("South"), BorderLayout.SOUTH);
 		frame.setVisible(true);
 		frame.pack();
+
+//	//	JFrame frame = new JFrame("AWT test");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		GLData data = new GLData();
+//		//data.samples = 4;
+//		frame.getContentPane().add(new AWTGLCanvas(data) {
+//
+//			@Override
+//			public void update(Graphics g) {
+//				render();
+//			}
+//
+//			@Override
+//			public void paint(Graphics g) {
+//				render();
+//			}
+//
+//			public void initGL() {
+//			}
+//			public void paintGL() {
+//				GL.createCapabilities();
+//				GL11.glClearColor(1,0,0,0.5f);
+//				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+//				swapBuffers();
+//			}
+//
+//			@Override
+//			public Dimension getPreferredSize() {
+//				return new Dimension(500,500);
+//			}
+//		}, BorderLayout.EAST);
+//	//	frame.getContentPane().add(new JLabel("South"), BorderLayout.SOUTH);
+//		frame.pack();
+//		frame.setVisible(true);
 	}
 
 	static class TestChooser extends ApplicationAdapter {
