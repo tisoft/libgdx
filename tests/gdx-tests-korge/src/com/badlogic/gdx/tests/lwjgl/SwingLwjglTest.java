@@ -20,6 +20,9 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -51,9 +54,11 @@ public class SwingLwjglTest extends JFrame {
 		canvas2.getCanvas().setSize(200, 480);
 		canvas3.getCanvas().setSize(200, 480);
 
+		container.add(new JTextField("Top"), BorderLayout.NORTH);
 		container.add(canvas1.getCanvas(), BorderLayout.LINE_START);
 		container.add(canvas2.getCanvas(), BorderLayout.CENTER);
 		container.add(canvas3.getCanvas(), BorderLayout.LINE_END);
+		container.add(new JLabel("Bottom"), BorderLayout.SOUTH);
 
 		pack();
 		setVisible(true);
