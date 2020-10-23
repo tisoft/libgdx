@@ -14,10 +14,6 @@
  * limitations under the License.
  ******************************************************************************/
 
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 ext {
     mainTestClass = "com.badlogic.gdx.tests.lwjgl3.Lwjgl3TestStarter"
 }

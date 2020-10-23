@@ -14,10 +14,6 @@
  * limitations under the License.
  ******************************************************************************/
 
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
