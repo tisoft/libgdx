@@ -110,7 +110,6 @@ public class TexturePackerTest extends ApplicationAdapter {
 
 	public static void main (String[] args) throws Exception {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		//config.forceExit = false;
 		config.setWindowedMode(640, 480);
 		config.setTitle("");
 		new Lwjgl3Application(new TexturePackerTest(), config);

@@ -481,7 +481,6 @@ public class TiledMapPacker {
 
 		TiledMapPacker packer = new TiledMapPacker(packerSettings);
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		//config.forceExit = false;
 		config.setWindowedMode(100, 50);
 		config.setTitle("TiledMapPacker");
 		new Lwjgl3Application(new ApplicationListener() {
