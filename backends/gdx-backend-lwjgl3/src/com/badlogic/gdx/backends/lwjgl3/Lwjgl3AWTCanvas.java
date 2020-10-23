@@ -304,8 +304,7 @@ public class Lwjgl3AWTCanvas implements Application {
 		if (audio != null) audio.update();
 
 		if (shouldRender) {
-//			graphics.updateTime();
-//			graphics.frameId++;
+			graphics.update();
 			listener.render();
 			canvas.swapBuffers();
 		}
