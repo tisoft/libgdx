@@ -140,8 +140,8 @@ public class Lwjgl3AWTCanvas implements Application {
 //					Gdx.gl.glClearColor(1.0f,0,0,0.5f);
 //					Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 					Gdx.gl.glViewport(0,0,getWidth(), getHeight());
-					Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-					Gdx.gl.glScissor(0,0,getWidth(),getHeight());
+//					Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+//					Gdx.gl.glScissor(0,0,getWidth(),getHeight());
 					try {
 						boolean systemPaint = !(EventQueue.getCurrentEvent() instanceof NonSystemPaint);
 						Lwjgl3AWTCanvas.this.render(systemPaint);
