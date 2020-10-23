@@ -300,6 +300,7 @@ public class Lwjgl3AWTCanvas implements Application {
 		if (!running) return;
 
 //		shouldRender |= graphics.shouldRender();
+		shouldRender=true;
 		input.processEvents();
 		if (audio != null) audio.update();
 
