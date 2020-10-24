@@ -32,6 +32,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.nio.IntBuffer;
@@ -71,45 +72,27 @@ public class Lwjgl3AWTGraphics implements Graphics, Disposable {
 			this.gl20 = new Lwjgl3GL20();
 			this.gl30 = null;
 		}
+
 		updateFramebufferInfo();
 
-		window.getCanvas().addComponentListener(new ComponentListener() {
+		window.getCanvas().addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				updateFramebufferInfo();
-				window.getCanvas().runInContext(new Runnable() {
-					@Override
-					public void run() {
-			gl20.glViewport(0, 0, getWidth(), getHeight());
-//			window.getListener().resize(getWidth(), getHeight());
-//			window.getListener().render();
-
-					}
-				});
-
+				updateViewport();
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent e) {
-updateFramebufferInfo();
-				window.getCanvas().runInContext(new Runnable() {
-					@Override
-					public void run() {
-						gl20.glViewport(0, 0, getWidth(), getHeight());
-//			window.getListener().resize(getWidth(), getHeight());
-//			window.getListener().render();
+				updateViewport();
+			}});
+	}
 
-					}
-				});		}
-
+	private void updateViewport() {
+		updateFramebufferInfo();
+		window.getCanvas().runInContext(new Runnable() {
 			@Override
-			public void componentShown(ComponentEvent e) {
-
-			}
-
-			@Override
-			public void componentHidden(ComponentEvent e) {
-
+			public void run() {
+				gl20.glViewport(0, 0, getWidth(), getHeight());
 			}
 		});
 	}
