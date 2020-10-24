@@ -18,6 +18,7 @@ package com.badlogic.gdx.backends.lwjgl3;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics.Lwjgl3Monitor;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.GL20;
@@ -497,31 +498,5 @@ public class Lwjgl3AWTGraphics implements Graphics, Disposable {
 	@Override
 	public void dispose() {
 //		this.resizeCallback.free();
-	}
-
-	public static class Lwjgl3DisplayMode extends DisplayMode {
-		final long monitorHandle;
-
-		Lwjgl3DisplayMode(long monitor, int width, int height, int refreshRate, int bitsPerPixel) {
-			super(width, height, refreshRate, bitsPerPixel);
-			this.monitorHandle = monitor;
-		}
-
-		public long getMonitor() {
-			return monitorHandle;
-		}
-	}
-
-	public static class Lwjgl3Monitor extends Monitor {
-		final long monitorHandle;
-
-		Lwjgl3Monitor(long monitor, int virtualX, int virtualY, String name) {
-			super(virtualX, virtualY, name);
-			this.monitorHandle = monitor;
-		}
-
-		public long getMonitorHandle() {
-			return monitorHandle;
-		}
 	}
 }
