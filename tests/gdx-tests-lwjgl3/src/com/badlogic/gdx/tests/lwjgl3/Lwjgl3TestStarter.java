@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,21 +43,21 @@ import com.badlogic.gdx.tests.utils.GdxTests;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Lwjgl3TestStarter {
-
+	
 	static CommandLineOptions options;
 
 	/**
 	 * Runs libgdx tests.
-	 *
+	 * 
 	 * some options can be passed, see {@link CommandLineOptions}
-	 *
+	 * 
 	 * @param argv command line arguments
 	 */
 	public static void main (String[] argv) {
 		System.setProperty("java.awt.headless", "true");
 
 		options = new CommandLineOptions(argv);
-
+		
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(640, 480);
 		if(options.gl30){
@@ -106,7 +106,7 @@ public class Lwjgl3TestStarter {
 						winConfig.setTitle(testName);
 						winConfig.setWindowedMode(640, 480);
 						winConfig.setWindowPosition(((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionX() + 40,
-								((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionY() + 40);
+							((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionY() + 40);
 						((Lwjgl3Application)Gdx.app).newWindow(test, winConfig);
 						System.out.println("Started test: " + testName);
 						prefs.putString("LastTest", testName);
@@ -130,7 +130,7 @@ public class Lwjgl3TestStarter {
 				lastClickedTestButton.setColor(Color.CYAN);
 				scroll.layout();
 				float scrollY = lastClickedTestButton.getY() + scroll.getScrollHeight() / 2 + lastClickedTestButton.getHeight() / 2 + tableSpace * 2
-						+ 20;
+					+ 20;
 				scroll.scrollTo(0, scrollY, 0, 0, false, false);
 
 				// Since ScrollPane takes some time for scrolling to a position, we just "fake" time
