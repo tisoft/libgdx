@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,51 +20,91 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTCanvas;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTFrame;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.tests.utils.CommandLineOptions;
-import com.badlogic.gdx.tests.utils.GdxTest;
-import com.badlogic.gdx.tests.utils.GdxTestConfig;
 import com.badlogic.gdx.tests.utils.GdxTests;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class Lwjgl3TestStarter {
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
+public class Lwjgl3AwtTestStarter {
+	
 	static CommandLineOptions options;
 
 	/**
 	 * Runs libgdx tests.
-	 *
+	 * 
 	 * some options can be passed, see {@link CommandLineOptions}
-	 *
+	 * 
 	 * @param argv command line arguments
 	 */
 	public static void main (String[] argv) {
-		System.setProperty("java.awt.headless", "true");
+		//System.setProperty("java.awt.headless", "true");
 
 		options = new CommandLineOptions(argv);
-
+		
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(640, 480);
 		if(options.gl30){
 			config.useOpenGL3(true, 3, 2);
 		}
 
-		new Lwjgl3Application(new TestChooser(), config);
+		//new Lwjgl3Application(new TestChooser(), config);
+		JFrame frame=new JFrame();
+		Lwjgl3AWTCanvas lwjgl3AWTCanvas = new Lwjgl3AWTCanvas(new TestChooser(), config);
+		lwjgl3AWTCanvas.getCanvas().setPreferredSize(new Dimension(640,480));
+		frame.getContentPane().add(new JLabel("North"), BorderLayout.NORTH);
+		frame.getContentPane().add(lwjgl3AWTCanvas.getCanvas(), BorderLayout.CENTER);
+		frame.getContentPane().add(new JLabel("South"), BorderLayout.SOUTH);
+		frame.setVisible(true);
+		frame.pack();
+
+//	//	JFrame frame = new JFrame("AWT test");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		GLData data = new GLData();
+//		//data.samples = 4;
+//		frame.getContentPane().add(new AWTGLCanvas(data) {
+//
+//			@Override
+//			public void update(Graphics g) {
+//				render();
+//			}
+//
+//			@Override
+//			public void paint(Graphics g) {
+//				render();
+//			}
+//
+//			public void initGL() {
+//			}
+//			public void paintGL() {
+//				GL.createCapabilities();
+//				GL11.glClearColor(1,0,0,0.5f);
+//				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+//				swapBuffers();
+//			}
+//
+//			@Override
+//			public Dimension getPreferredSize() {
+//				return new Dimension(500,500);
+//			}
+//		}, BorderLayout.EAST);
+//	//	frame.getContentPane().add(new JLabel("South"), BorderLayout.SOUTH);
+//		frame.pack();
+//		frame.setVisible(true);
 	}
 
 	static class TestChooser extends ApplicationAdapter {
@@ -102,12 +142,10 @@ public class Lwjgl3TestStarter {
 					@Override
 					public void changed (ChangeEvent event, Actor actor) {
 						ApplicationListener test = GdxTests.newTest(testName);
-						Lwjgl3WindowConfiguration winConfig = new Lwjgl3WindowConfiguration();
-						winConfig.setTitle(testName);
-						winConfig.setWindowedMode(640, 480);
-						winConfig.setWindowPosition(((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionX() + 40,
-								((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionY() + 40);
-						((Lwjgl3Application)Gdx.app).newWindow(test, winConfig);
+						Lwjgl3AWTFrame frame = new Lwjgl3AWTFrame(test, testName, 640, 480);
+//						winConfig.setWindowPosition(((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionX() + 40,
+//							((Lwjgl3Graphics)Gdx.graphics).getWindow().getPositionY() + 40);
+						frame.setVisible(true);
 						System.out.println("Started test: " + testName);
 						prefs.putString("LastTest", testName);
 						prefs.flush();
@@ -130,7 +168,7 @@ public class Lwjgl3TestStarter {
 				lastClickedTestButton.setColor(Color.CYAN);
 				scroll.layout();
 				float scrollY = lastClickedTestButton.getY() + scroll.getScrollHeight() / 2 + lastClickedTestButton.getHeight() / 2 + tableSpace * 2
-						+ 20;
+					+ 20;
 				scroll.scrollTo(0, scrollY, 0, 0, false, false);
 
 				// Since ScrollPane takes some time for scrolling to a position, we just "fake" time
