@@ -19,7 +19,6 @@ targetCompatibility = 1.8
 
 dependencies {
     compile libraries.lwjgl3
-    compile ('com.github.tisoft:lwjgl3-awt:727caee400')
 }
 
 
