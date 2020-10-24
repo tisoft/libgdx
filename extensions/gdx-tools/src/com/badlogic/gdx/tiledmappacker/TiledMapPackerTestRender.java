@@ -22,8 +22,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTFrame;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -109,9 +108,6 @@ public class TiledMapPackerTestRender extends ApplicationAdapter {
 			System.out.println("Please run TiledMapPackerTest.");
 			return;
 		}
-		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(640, 480);
-		config.setTitle("");
-		new Lwjgl3Application(new TiledMapPackerTestRender(), config);
+		new Lwjgl3AWTFrame(new TiledMapPackerTestRender(), "", 640, 480);
 	}
 }

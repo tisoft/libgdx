@@ -20,8 +20,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTFrame;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -109,9 +108,6 @@ public class TexturePackerTest extends ApplicationAdapter {
 	}
 
 	public static void main (String[] args) throws Exception {
-		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(640, 480);
-		config.setTitle("");
-		new Lwjgl3Application(new TexturePackerTest(), config);
+		new Lwjgl3AWTFrame(new TexturePackerTest(), "", 640, 480);
 	}
 }

@@ -31,6 +31,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3AWTFrame;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -41,8 +42,6 @@ import org.xml.sax.SAXException;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
@@ -480,10 +479,7 @@ public class TiledMapPacker {
 		}
 
 		TiledMapPacker packer = new TiledMapPacker(packerSettings);
-		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(100, 50);
-		config.setTitle("TiledMapPacker");
-		new Lwjgl3Application(new ApplicationListener() {
+		new Lwjgl3AWTFrame(new ApplicationListener() {
 
 			@Override
 			public void resume () {
@@ -522,7 +518,7 @@ public class TiledMapPacker {
 				System.out.println("Finished processing.");
 				Gdx.app.exit();
 			}
-		}, config);
+		}, "", 100, 50);
 	}
 
 	private static void processExtraArgs (String[] args, TiledMapPackerSettings packerSettings) {
