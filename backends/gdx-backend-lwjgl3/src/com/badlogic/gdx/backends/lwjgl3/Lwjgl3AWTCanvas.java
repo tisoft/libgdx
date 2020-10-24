@@ -31,6 +31,8 @@ import com.badlogic.gdx.backends.lwjgl3.audio.OpenALLwjgl3Audio;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Clipboard;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 
@@ -55,7 +57,7 @@ import java.util.Map;
  * shutdown hooks.
  * @author Nathan Sweet */
 public class Lwjgl3AWTCanvas implements Application {
-	static int instanceCount;
+	private static boolean glfwInitialized;
 
 	Lwjgl3AWTGraphics graphics;
 	OpenALLwjgl3Audio audio;
@@ -74,6 +76,7 @@ public class Lwjgl3AWTCanvas implements Application {
 	ApplicationLogger applicationLogger;
 	final String logTag = "LwjglAWTCanvas";
 	Cursor cursor;
+	private final Sync sync;
 
 	public Lwjgl3ApplicationConfiguration getConfig() {
 		return config;
@@ -102,7 +105,8 @@ public class Lwjgl3AWTCanvas implements Application {
 
 		Lwjgl3NativesLoader.load();
 		setApplicationLogger(new Lwjgl3ApplicationLogger());
-		instanceCount++;
+
+		this.sync = new Sync();
 
 		try {
 			canvas = new AWTGLCanvas() {
@@ -264,6 +268,14 @@ public class Lwjgl3AWTCanvas implements Application {
 	void create () {
 		try {
 			setGlobals();
+			if (!glfwInitialized) {
+				// We need to initialize GLFW in the rendering thread
+				glfwInitialized = GLFW.glfwInit();
+				if (!glfwInitialized) {
+					throw new GdxRuntimeException("Unable to initialize GLFW");
+				}
+			}
+
 			graphics.initiateGL();
 //			canvas.setVSyncEnabled(graphics.config.vSyncEnabled);
 			listener.create();
@@ -308,9 +320,8 @@ public class Lwjgl3AWTCanvas implements Application {
 			graphics.update();
 			listener.render();
 			canvas.swapBuffers();
+			sync.sync(getFrameRate());
 		}
-
-//		Display.sync(getFrameRate() * instanceCount);
 	}
 
 	public boolean executeRunnables () {
@@ -386,8 +397,6 @@ public class Lwjgl3AWTCanvas implements Application {
 		if (files != null) Gdx.files = null;
 
 		if (net != null) Gdx.net = null;
-
-		instanceCount--;
 
 		stopped();
 	}
