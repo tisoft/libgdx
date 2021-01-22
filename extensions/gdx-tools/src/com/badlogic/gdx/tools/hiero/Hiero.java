@@ -1269,7 +1269,7 @@ public class Hiero extends JFrame {
 			});
 
 			updateValues();
-			updateFont();
+			rendererCanvas.getCanvas().runInContext(Hiero.this::updateFont);
 			updateUpDownButtons();
 		}
 
